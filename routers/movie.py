@@ -80,9 +80,8 @@ def update_movies(id:int, movie: Movie) -> dict:
     status_code=200)
 def delete_movie(id: int) -> dict:
     db = Session()
-    result = db.query(MovieModel).filter(MovieModel.id == id).first()
+    result : MovieModel = db.query(MovieModel).filter(MovieModel.id == id).first()
     if not result:
         return JSONResponse(status_code=404, content={'message':'Pelicula no registrada en la BD actual.'})
-    db.delete(result)
-    db.commit()
+    MovieService(db).delete_movie(id)
     return JSONResponse(status_code=200,content={"message":"Your movie has been DELETED!!!"})
